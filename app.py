@@ -1,9 +1,14 @@
+#!/usr/bin/env python
 import pygame
 import sys
 #DFS
 #BFS
 #Dijkstra
 #AStar
+
+###--MOUSE EVENT MAPPING--###
+mouse_button_event = {"LEFT" : 1, "RIGHT" : 2}
+####
 
 window_width = 800
 window_height = 800
@@ -16,7 +21,7 @@ queue = []
 path = []
 
 square_width = window_width // columns
-sqauqre_height = window_height // rows
+square_height = window_height // rows
 
 class Square:
     def __init__(self, i, j):
@@ -31,7 +36,7 @@ class Square:
         self.prior = None
     
     def draw(self, win, color):
-        pygame.draw.rect(win, color, (self.x * square_width, self.y * sqauqre_height, square_width - 2, sqauqre_height - 2))
+        pygame.draw.rect(win, color, (self.x * square_width, self.y * square_height, square_width - 2, square_height - 2))
 
     def set_neighbours(self):
         if self.x > 0:
@@ -112,14 +117,23 @@ class Maze:
                     y = pygame.mouse.get_pos()[1]
                     if event.buttons[0]:
                         i = x // square_width
-                        j = y // sqauqre_height
+                        j = y // square_height
                         grid[i][j].wall = True
                     if event.buttons[2] and not target_box_set:
                         i = x // square_width
-                        j = y // sqauqre_height
+                        j = y // square_height
                         target_box = grid[i][j]
                         target_box.target = True
                         target_box_set = True
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_button_event["LEFT"]:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    i = x // square_width
+                    j = y // square_height
+                    if grid[i][j].wall:
+                        grid[i][j].wall = False
+                    else:
+                        grid[i][j].wall = True
                 #start algo
                 if event.type == pygame.KEYDOWN and target_box_set:
                     begin_search = True
@@ -133,6 +147,7 @@ class Maze:
                         searching = False
                         while current_square.prior != start_square:
                             path.append(current_square.prior)
+                            print(path)
                             current_square = current_square.prior
                     else:
                         for neighbour in current_square.neighbours:
