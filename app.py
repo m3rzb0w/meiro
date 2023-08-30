@@ -119,12 +119,12 @@ class Maze:
                         i = x // square_width
                         j = y // square_height
                         grid[i][j].wall = True
-                    if event.buttons[2] and not target_box_set:
-                        i = x // square_width
-                        j = y // square_height
-                        target_box = grid[i][j]
-                        target_box.target = True
-                        target_box_set = True
+                    # if event.buttons[2] and not target_box_set:
+                    #     i = x // square_width
+                    #     j = y // square_height
+                    #     target_box = grid[i][j]
+                    #     target_box.target = True
+                    #     target_box_set = True
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_buttons_event["LEFT"]:
                     x = pygame.mouse.get_pos()[0]
                     y = pygame.mouse.get_pos()[1]
@@ -146,6 +146,8 @@ class Maze:
                         grid[i][j].wall = False
                         target_box_set = False
                     else:
+                        if target_box:
+                            target_box.target = False
                         grid[i][j].target = True
                         grid[i][j].wall = False
                         target_box = grid[i][j]
