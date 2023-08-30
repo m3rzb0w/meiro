@@ -7,7 +7,7 @@ import sys
 #AStar
 
 ###--MOUSE EVENT MAPPING--###
-mouse_button_event = {"LEFT" : 1, "RIGHT" : 2}
+mouse_buttons_event = {"LEFT": 1, "MIDDLE": 2, "RIGHT": 3}
 ####
 
 window_width = 800
@@ -125,15 +125,31 @@ class Maze:
                         target_box = grid[i][j]
                         target_box.target = True
                         target_box_set = True
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_button_event["LEFT"]:
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_buttons_event["LEFT"]:
                     x = pygame.mouse.get_pos()[0]
                     y = pygame.mouse.get_pos()[1]
                     i = x // square_width
                     j = y // square_height
                     if grid[i][j].wall:
                         grid[i][j].wall = False
+                        grid[i][j].target = False
                     else:
                         grid[i][j].wall = True
+                        grid[i][j].target = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_buttons_event["RIGHT"]:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    i = x // square_width
+                    j = y // square_height
+                    if grid[i][j].target:
+                        grid[i][j].target = False
+                        grid[i][j].wall = False
+                        target_box_set = False
+                    else:
+                        grid[i][j].target = True
+                        grid[i][j].wall = False
+                        target_box = grid[i][j]
+                        target_box_set = True
                 #start algo
                 if event.type == pygame.KEYDOWN and target_box_set:
                     begin_search = True
