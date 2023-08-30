@@ -53,16 +53,12 @@ for i in range(columns):
     for j in range(rows):
         arr.append(Square(i, j))
     grid.append(arr)
-print(grid)
 
 for i in range(columns):
     for j in range(rows):
         grid[i][j].set_neighbours()
 
-start_square = grid[0][0]
-start_square.start = True
-start_square.visited = True
-queue.append(start_square)
+
 
 class Maze:
     def __init__(self):
@@ -96,6 +92,12 @@ class Maze:
                     square.draw(self.display, (255, 20, 147))
 
     def run(self):
+
+        start_square = grid[0][0]
+        start_square.start = True
+        start_square.visited = True
+        queue.append(start_square)
+
         begin_search = False
         target_box_set = False
         searching = True
@@ -130,6 +132,24 @@ class Maze:
                     else:
                         grid[i][j].wall = True
                         grid[i][j].target = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_buttons_event["MIDDLE"]:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    i = x // square_width
+                    j = y // square_height
+                    if grid[i][j].start:
+                        grid[i][j].start = False
+                        grid[i][j].visited = False
+                        queue.pop(0)
+                    else:
+                        if start_square:
+                            start_square.start = False
+                            start_square.visited = False
+                            queue.pop(0)
+                        start_square = grid[i][j]
+                        start_square.start = True
+                        start_square.visited = True
+                        queue.append(start_square)
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == mouse_buttons_event["RIGHT"]:
                     x = pygame.mouse.get_pos()[0]
                     y = pygame.mouse.get_pos()[1]
@@ -159,8 +179,8 @@ class Maze:
                         searching = False
                         while current_square.prior != start_square:
                             path.append(current_square.prior)
-                            print(path)
                             current_square = current_square.prior
+                        print(len(path) + 2)
                     else:
                         for neighbour in current_square.neighbours:
                             if not neighbour.queued and not neighbour.wall:
