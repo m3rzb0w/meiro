@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import pygame
 import sys
-#DFS
+#DFS todo
 #BFS
-#Dijkstra
-#AStar
+#Dijkstra todo
+#AStar todo
 
 ###--MOUSE EVENT MAPPING--###
 mouse_buttons_event = {"LEFT": 1, "MIDDLE": 2, "RIGHT": 3}
